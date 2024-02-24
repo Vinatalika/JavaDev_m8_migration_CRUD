@@ -1,7 +1,6 @@
 package org.example;
 
 import java.sql.*;
-
 public class Database {
     private static final Database INSTANCE = new Database();
     private Connection connection;
@@ -14,6 +13,7 @@ public class Database {
             ex.printStackTrace();
         }
     }
+
     public static Database getINSTANCE() {
         return INSTANCE;
     }
@@ -21,14 +21,7 @@ public class Database {
     public Connection getConnection() {
         return connection;
     }
-    public int executeUpdate(String sql) {
-        try (Statement st = connection.createStatement()) {
-            return st.executeUpdate(sql);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return -1;
-        }
-    }
+
     public void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
@@ -36,15 +29,6 @@ public class Database {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }
-    public ResultSet executeQuery(String sql) {
-        try {
-            Statement statement = connection.createStatement();
-            return statement.executeQuery(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
         }
     }
 }

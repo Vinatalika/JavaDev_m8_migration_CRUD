@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.PreparedStatement;
+
 
 public class DatabaseQueryService {
     private List<MaxProjectCountClient> processMaxProjectsClientResultSet(ResultSet resultSet) throws SQLException {
@@ -18,7 +20,7 @@ public class DatabaseQueryService {
             MaxProjectCountClient client = new MaxProjectCountClient();
             client.setId(resultSet.getInt("ID"));
             client.setName(resultSet.getString("NAME"));
-            client.setProjectCount(resultSet.getInt("project_count")); // Use the correct alias here
+            client.setProjectCount(resultSet.getInt("project_count"));
             result.add(client);
         }
         return result;
@@ -28,8 +30,14 @@ public class DatabaseQueryService {
         try {
             String sqlFilePath = new Prefs().getString(Prefs.FIND_LONGEST_PROJECT_FILE_PATH);
             String sql = new String(Files.readAllBytes(Paths.get(sqlFilePath)));
-            ResultSet resultSet = database.executeQuery(sql);
-            return processLongestProjectResultSet(resultSet);
+
+            // Використання PreparedStatement
+            try (PreparedStatement preparedStatement = database.getConnection().prepareStatement(sql)) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+                return processLongestProjectResultSet(resultSet);
+            }
+
+
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }
@@ -39,8 +47,13 @@ public class DatabaseQueryService {
         try {
             String sqlFilePath = new Prefs().getString(Prefs.DB_FIND_MAX_SALARY_WORKER_PATH);
             String sql = new String(Files.readAllBytes(Paths.get(sqlFilePath)));
-            ResultSet resultSet = database.executeQuery(sql);
-            return processMaxSalaryWorkerResultSet(resultSet);
+
+            // Використання PreparedStatement
+            try (PreparedStatement preparedStatement = database.getConnection().prepareStatement(sql)) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+                return processMaxSalaryWorkerResultSet(resultSet);
+            }
+
         } catch (SQLException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -50,8 +63,13 @@ public class DatabaseQueryService {
         try {
             String sqlFilePath = new Prefs().getString(Prefs.DB_YOUNGEST_ELDEST_WORKER_PATH);
             String sql = new String(Files.readAllBytes(Paths.get(sqlFilePath)));
-            ResultSet resultSet = database.executeQuery(sql);
-            return processYoungestEldestWorkersResultSet(resultSet);
+
+            // Використання PreparedStatement
+            try (PreparedStatement preparedStatement = database.getConnection().prepareStatement(sql)) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+                return processYoungestEldestWorkersResultSet(resultSet);
+            }
+
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }
@@ -61,21 +79,30 @@ public class DatabaseQueryService {
         try {
             String sqlFilePath = new Prefs().getString(Prefs.PRINT_PROJECT_PRICES);
             String sql = new String(Files.readAllBytes(Paths.get(sqlFilePath)));
-            ResultSet resultSet = database.executeQuery(sql);
-            return processPrintProjectPricesResultSet(resultSet);
+
+            // Використання PreparedStatement
+            try (PreparedStatement preparedStatement = database.getConnection().prepareStatement(sql)) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+                return processPrintProjectPricesResultSet(resultSet);
+            }
+
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
 
     public List<MaxProjectCountClient> findMaxProjectsClient(Database database) {
         try {
             String sqlFilePath = new Prefs().getString(Prefs.DB_FIND_MAX_PROJECT_CLIENT_PATH);
             String sql = new String(Files.readAllBytes(Paths.get(sqlFilePath)));
             System.out.println("Executing SQL statement: " + sql);
-            ResultSet resultSet = database.executeQuery(sql);
-            return processMaxProjectsClientResultSet(resultSet);
+
+            // Використання PreparedStatement
+            try (PreparedStatement preparedStatement = database.getConnection().prepareStatement(sql)) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+                return processMaxProjectsClientResultSet(resultSet);
+            }
+
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }

@@ -1,7 +1,6 @@
 package org.example.info;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Prefs {
-    //public static final String DB_JDBC_CONNECTION_URL = "dbUrl";
     public static final String DB_FIND_MAX_PROJECT_CLIENT_PATH = "findMaxProjectsClient";
     public static final String DB_FIND_MAX_SALARY_WORKER_PATH = "findMaxSalaryWorker";
     public static final String DB_YOUNGEST_ELDEST_WORKER_PATH = "findYoungestEldestWorkers";
@@ -32,7 +30,6 @@ public class Prefs {
             TypeToken<Map<String, Object>> typeToken = new TypeToken<Map<String, Object>>() {};
             prefs = new Gson().fromJson(json, typeToken.getType());
 
-            // Convert all paths to absolute paths based on content root
             String contentRoot = System.getProperty("user.dir");
             prefs.forEach((key, value) -> {
                 if (value instanceof String) {
@@ -59,4 +56,5 @@ public class Prefs {
     public Object getPref(String key) {
         return prefs.get(key);
     }
+
 }
