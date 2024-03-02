@@ -1,25 +1,24 @@
 package org.example;
 
+import lombok.Getter;
 import java.sql.*;
+
 public class Database {
+    @Getter
     private static final Database INSTANCE = new Database();
+    @Getter
     private Connection connection;
 
     private Database() {
         try {
-            Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection("jdbc:h2:./test", "sa", "");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public static Database getINSTANCE() {
-        return INSTANCE;
-    }
-
-    public Connection getConnection() {
-        return connection;
+    public String getConnectionUrl() {
+        return "jdbc:h2:./test";
     }
 
     public void closeConnection() {
